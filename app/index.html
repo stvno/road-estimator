@@ -1,0 +1,41 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Road estimator explorer</title>
+  <meta name="description" content="Vega charts explorer of road related data">
+  <meta name="author" content="@stvno">
+
+
+
+    <!-- build:css styles/vendor.css -->
+    <!-- endbuild -->
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="/styles/main.css">
+    <!-- endbuild -->
+
+</head>
+<body>
+  <button class="btn btn-success" id="authorize-button" ><span class="glyphicon glyphicon-lock"></span> Authorize</button>
+    
+  <div id="mWegPpopDens" class="graph"></div>
+  <div id="view" class="graph"></div>
+  <div id="poproad" class="graph"></div>
+  <div id="mWegPpop" class="graph"></div>
+
+
+    <!-- build:js scripts/vendor.js -->
+    <script src="/scripts/vendor.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/bundle.js -->
+    <script src="/scripts/bundle.js"></script>
+    <!-- endbuild -->
+<script async defer src="https://apis.google.com/js/api.js">
+</script>
+
+</body>
+</html>

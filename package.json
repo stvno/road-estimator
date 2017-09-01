@@ -1,0 +1,60 @@
+{
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ]
+        }
+      ],
+      "require-globify",
+      "envify"
+    ]
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.23.0",
+    "google-client-api": "^1.0.4",
+    "tabletop": "^1.5.2",
+    "vega": "^3.0.2"
+  },
+  "scripts": {
+    "serve": "DS_ENV=development gulp collecticons && gulp serve"
+  },
+  "name": "road-estimator",
+  "version": "0.0.1",
+  "description": "Tool to estimate the road coverage in OSM per country",
+  "main": "index.html",
+  "repository": "git@github.com:stvno/road-estimator.git",
+  "author": "Steven M. Ottens <steven.ottens@geodan.nl>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browser-sync": "^2.18.13",
+    "browserify": "^14.4.0",
+    "d3": "^4.10.0",
+    "del": "^3.0.0",
+    "envify": "^4.1.0",
+    "eslint": "^4.5.0",
+    "gulp": "^3.9.1",
+    "gulp-exit": "^0.0.2",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rev": "^8.0.0",
+    "gulp-rev-replace": "^0.4.3",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.1",
+    "jeet": "^7.1.0",
+    "marked": "^0.3.6",
+    "node-bourbon": "^4.2.8",
+    "node-notifier": "^5.1.2",
+    "node-sass": "^4.5.3",
+    "require-globify": "^1.4.1",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.9.0"
+  }
+}
