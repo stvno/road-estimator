@@ -10,7 +10,9 @@
   ],
 
   "data": [{
-  	"name": "cia",
+  	    "format": {"type": "csv", "parse": "auto"},
+    "name": "cia",
+    "url": "../data/road-data.csv",
   	 "transform": [
         { "type": "filter", "expr": "datum.population > 300000" },
         { "type": "filter", "expr": "datum.roads < 2000000" },

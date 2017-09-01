@@ -1,4 +1,9 @@
-
-.graph {
+.graphcontainer {
+	display: flex;
 	
+	flex-wrap: wrap;
+
+}
+.graph {
+	margin: 10px;
 }

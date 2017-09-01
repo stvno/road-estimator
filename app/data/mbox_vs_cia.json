@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v3.0.json",
   "description": "A specification outline example.",
-  "width": 500,
+  "width": 1000,
   "height": 300,
   "padding": 5,
   "autosize": "pad",
@@ -15,17 +15,23 @@
     "url": "../data/road-data.csv",
   	 "transform": [
         { "type": "filter", "expr": "datum.population > 300000" },
-		    { "type": "filter", "expr": "(datum.population / datum.size) < 650" },
-		    {
+        { "type": "filter", "expr": "datum.roads < 3000000" },
+		    { "type": "filter", "expr": "(datum.population / datum.size) < 650" },		    
+        {
           "type": "formula",
           "expr": "datum.roads  / datum.population *1000",
           "as":   "mWegPpop"
         },
         {
+          "type": "formula",
+          "expr": "datum.coverage",
+          "as":   "complete"
+        },
+        {
           "type": "collect",
           "sort": {
-            "field": ["continent", "size"],
-            "order": ["ascending", "descending"]
+            "field": ["complete"],
+            "order": ["ascending"]
            }
         },
         
@@ -40,7 +46,7 @@
   "scales": [
     {
       "name": "x",
-      "type": "point",
+     "type": "point",
       "round": true,
       "nice": true,
       "zero": true,
@@ -53,7 +59,7 @@
       "range": "height",
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "mWegPpop"}
+      "domain": {"data": "cia", "field": "complete"}
     },
     {
       "name": "color",
@@ -65,35 +71,34 @@
   "projections": [],
    "axes": [
    
+    
     {
       "scale": "y",
       "grid": true,
       "domain": false,
       "orient": "left",
       "titlePadding": 5,
-      "title": "m road / person"
+      "title": "OSM coverage (%)",
+      "format": "0%"
     }
   ],
 
   "legends": [],
    "marks": [
     {
-      "name": "roads_pop",
+      "name": "size_pop",
       "type": "symbol",
       "from": {"data": "cia"},
       "encode": {
-      	"enter":{
-      	  "tooltip": {
-      		"size": {"value": 50},
-      		"field": "tooltip"
-      	  }
+        "enter": {
+          "size": {"value": 50},
+          "tooltip": {"field": "tooltip"}
         },
         "update": {
           "x": {"scale": "x", "field": "country"},
-          "y": {"scale": "y", "field": "mWegPpop"},
+          "y": {"scale": "y", "field": "complete"},
           "shape": {"value": "circle"},
-          "strokeWidth": {"value": 2},
-          "opacity": {"value": 0.8},          
+          "opacity": {"value": 0.8},
           "fill": {"scale": "color", "field": "continent"}
         }
       }
