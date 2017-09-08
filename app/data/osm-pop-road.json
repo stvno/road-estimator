@@ -4,21 +4,22 @@
   "width": 500,
   "height": 300,
   "padding": 5,
-  "autosize": {"type": "fit", "resize": true},
+  "autosize": "pad",
 
   "signals": [
   ],
-
+  "title": {
+    "text": "population vs OSM km roads"
+  },
   "data": [{
-    "format": {"type": "csv", "parse": "auto"},
-  	"name": "cia",
-    "url": "../data/road-data.csv",
+  	    "format": {"type": "csv", "parse": "auto"},
+    "name": "cia",
+    "url": "./data/road-data.csv",
   	 "transform": [
         { "type": "filter", "expr": "datum.population > 300000" },
-        { "type": "filter", "expr": "datum.population < 300000000" },
-
-        { "type": "filter", "expr": "datum.size < 5000000" },
-		    { "type": "filter", "expr": "(datum.population / datum.size) < 650" },
+        { "type": "filter", "expr": "datum.roads < 2000000" },
+		{ "type": "filter", "expr": "(datum.population / datum.size) < 650" }
+    ,
         {
           "type": "formula",
           "expr": "datum.country",
@@ -29,12 +30,12 @@
   
   "scales": [
     {
-      "name": "size_x",
+      "name": "roads_x",
       "type": "sqrt",
       "round": true,
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "size"},
+      "domain": {"data": "cia", "field": "osmdistancekm"},
       "range" : "width"
     },
     {
@@ -54,13 +55,13 @@
   ],
   "projections": [],
    "axes": [
-     {
-      "scale": "size_x",
+    {
+      "scale": "roads_x",
       "grid": true,
       "domain": false,
       "orient": "bottom",
       "tickCount": 5,
-      "title": "Square Km"
+      "title": "Km"
     },
     {
       "scale": "pop_y",
@@ -74,20 +75,21 @@
 
   "legends": [],
    "marks": [
-   	{
-      "name": "size_pop",
+    {
+      "name": "roads_pop",
       "type": "symbol",
       "from": {"data": "cia"},
       "encode": {
-        "enter": {
+         "enter": {
           "size": {"value": 50},
           "tooltip": {"field": "tooltip"}
         },
         "update": {
-          "x": {"scale": "size_x", "field": "size"},
+          "x": {"scale": "roads_x", "field": "osmdistancekm"},
           "y": {"scale": "pop_y", "field": "population"},
           "shape": {"value": "circle"},
-          "opacity": {"value": 0.8},
+          "strokeWidth": {"value": 2},
+          "opacity": {"value": 0.8},          
           "fill": {"scale": "color", "field": "continent"}
         }
       }

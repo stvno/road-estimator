@@ -8,19 +8,38 @@
 
   "signals": [
   ],
-
+"title": {
+    "text": "CIA meters road / person vs population density" 
+  },
   "data": [{
   	    "format": {"type": "csv", "parse": "auto"},
     "name": "cia",
-    "url": "../data/road-data.csv",
+    "url": "./data/road-data.csv",
   	 "transform": [
         { "type": "filter", "expr": "datum.population > 300000" },
-        { "type": "filter", "expr": "datum.roads < 2000000" },
-		{ "type": "filter", "expr": "(datum.population / datum.size) < 650" }
-    ,
+		    { "type": "filter", "expr": "(datum.population / datum.size) < 650" },
+		    {
+          "type": "formula",
+          "expr": "datum.roads  / datum.population *1000",
+          "as":   "mWegPpop"
+        },
         {
           "type": "formula",
-          "expr": "datum.country",
+          "expr": "datum.population  / datum.size",
+          "as":   "popdens"
+        },
+
+        {
+          "type": "collect",
+          "sort": {
+            "field": ["continent", "size"],
+            "order": ["ascending", "descending"]
+           }
+        },
+        
+        {
+          "type": "formula",
+          "expr": "datum.country + ' ' + datum.continent",
           "as":   "tooltip"
         }
     ]
@@ -28,21 +47,21 @@
   
   "scales": [
     {
-      "name": "roads_x",
-      "type": "sqrt",
+      "name": "x",
+      "type": "linear",
       "round": true,
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "roads"},
+      "domain": {"data": "cia", "field": "popdens"},
       "range" : "width"
     },
     {
-      "name": "pop_y",
-      "type": "sqrt",
+      "name": "y",
+      "type": "linear",
       "range": "height",
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "population"}
+      "domain": {"data": "cia", "field": "mWegPpop"}
     },
     {
       "name": "color",
@@ -53,21 +72,22 @@
   ],
   "projections": [],
    "axes": [
+   
     {
-      "scale": "roads_x",
-      "grid": true,
-      "domain": false,
-      "orient": "bottom",
-      "tickCount": 5,
-      "title": "Km"
-    },
-    {
-      "scale": "pop_y",
+      "scale": "y",
       "grid": true,
       "domain": false,
       "orient": "left",
       "titlePadding": 5,
-      "title": "population"
+      "title": "m road / person"
+    },
+    {
+      "scale": "x",
+      "grid": true,
+      "domain": false,
+      "orient": "bottom",
+      "titlePadding": 5,
+      "title": "people / km2"
     }
   ],
 
@@ -78,13 +98,15 @@
       "type": "symbol",
       "from": {"data": "cia"},
       "encode": {
-         "enter": {
-          "size": {"value": 50},
-          "tooltip": {"field": "tooltip"}
+      	"enter":{
+      	  "tooltip": {
+      		"size": {"value": 50},
+      		"field": "tooltip"
+      	  }
         },
         "update": {
-          "x": {"scale": "roads_x", "field": "roads"},
-          "y": {"scale": "pop_y", "field": "population"},
+          "x": {"scale": "x", "field": "popdens"},
+          "y": {"scale": "y", "field": "mWegPpop"},
           "shape": {"value": "circle"},
           "strokeWidth": {"value": 2},
           "opacity": {"value": 0.8},          

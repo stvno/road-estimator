@@ -1,43 +1,27 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v3.0.json",
   "description": "A specification outline example.",
-  "width": 1000,
+  "width": 500,
   "height": 300,
   "padding": 5,
-  "autosize": "pad",
+  "autosize": {"type": "fit", "resize": true},
 
   "signals": [
   ],
 
   "data": [{
-  	    "format": {"type": "csv", "parse": "auto"},
-    "name": "cia",
+    "format": {"type": "csv", "parse": "auto"},
+  	"name": "cia",
     "url": "./data/road-data.csv",
   	 "transform": [
         { "type": "filter", "expr": "datum.population > 300000" },
-        { "type": "filter", "expr": "datum.roads < 3000000" },
-		    { "type": "filter", "expr": "(datum.population / datum.size) < 650" },		    
+        { "type": "filter", "expr": "datum.population < 300000000" },
+
+        { "type": "filter", "expr": "datum.size < 5000000" },
+		    { "type": "filter", "expr": "(datum.population / datum.size) < 650" },
         {
           "type": "formula",
-          "expr": "datum.roads  / datum.population *1000",
-          "as":   "mWegPpop"
-        },
-        {
-          "type": "formula",
-          "expr": "datum.coverage",
-          "as":   "complete"
-        },
-        {
-          "type": "collect",
-          "sort": {
-            "field": ["complete"],
-            "order": ["ascending"]
-           }
-        },
-        
-        {
-          "type": "formula",
-          "expr": "datum.country + ' ' + datum.continent",
+          "expr": "datum.country",
           "as":   "tooltip"
         }
     ]
@@ -45,21 +29,21 @@
   
   "scales": [
     {
-      "name": "x",
-     "type": "point",
+      "name": "size_x",
+      "type": "sqrt",
       "round": true,
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "country"},
+      "domain": {"data": "cia", "field": "size"},
       "range" : "width"
     },
     {
-      "name": "y",
-      "type": "linear",
+      "name": "pop_y",
+      "type": "sqrt",
       "range": "height",
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "complete"}
+      "domain": {"data": "cia", "field": "population"}
     },
     {
       "name": "color",
@@ -70,22 +54,27 @@
   ],
   "projections": [],
    "axes": [
-   
-    
+     {
+      "scale": "size_x",
+      "grid": true,
+      "domain": false,
+      "orient": "bottom",
+      "tickCount": 5,
+      "title": "Square Km"
+    },
     {
-      "scale": "y",
+      "scale": "pop_y",
       "grid": true,
       "domain": false,
       "orient": "left",
       "titlePadding": 5,
-      "title": "OSM coverage (%)",
-      "format": "0%"
+      "title": "population"
     }
   ],
 
   "legends": [],
    "marks": [
-    {
+   	{
       "name": "size_pop",
       "type": "symbol",
       "from": {"data": "cia"},
@@ -95,8 +84,8 @@
           "tooltip": {"field": "tooltip"}
         },
         "update": {
-          "x": {"scale": "x", "field": "country"},
-          "y": {"scale": "y", "field": "complete"},
+          "x": {"scale": "size_x", "field": "size"},
+          "y": {"scale": "pop_y", "field": "population"},
           "shape": {"value": "circle"},
           "opacity": {"value": 0.8},
           "fill": {"scale": "color", "field": "continent"}

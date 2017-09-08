@@ -27,7 +27,7 @@ var marked = require('marked');
 
 // The package.json
 var pkg;
-
+var prodBuild = false;
 
 // /////////////////////////////////////////////////////////////////////////////
 // ------------------------- Helper functions --------------------------------//
@@ -42,7 +42,9 @@ readPackage();
 // ------------------------- Callable tasks ----------------------------------//
 // ---------------------------------------------------------------------------//
 
-gulp.task('default', ['clean'], function () {  
+gulp.task('default', ['clean'], function () {
+  prodBuild = true;
+
   gulp.start('build');
 });
 
@@ -89,7 +91,7 @@ gulp.task('javascript', function () {
     debug: true,
     cache: {},
     packageCache: {},
-    fullPaths: true
+    fullPaths: false
   }), {poll: true});
 
   function bundler () {

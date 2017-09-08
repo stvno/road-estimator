@@ -12,22 +12,17 @@
   "data": [{
   	    "format": {"type": "csv", "parse": "auto"},
     "name": "cia",
-    "url": "../data/road-data.csv",
+    "url": "./data/road-data.csv",
   	 "transform": [
         { "type": "filter", "expr": "datum.population > 300000" },
-		{ "type": "filter", "expr": "(datum.population / datum.size) < 650" },
-		{
+		    { "type": "filter", "expr": "(datum.population / datum.size) < 650" },
+		    {
           "type": "formula",
-          "expr": "datum.roads  / datum.population / datum.size *1000",
+          "expr": "(datum.roads - datum.osmdistancekm)  / datum.population *1000",
           "as":   "mWegPpop"
         },
-        {
-		  "type": "collect",
-		  "sort": {
-		    "field": "size",
-		    "order": "descending"
-		  }
-		},
+       
+        
         {
           "type": "formula",
           "expr": "datum.country + ' ' + datum.continent",
@@ -37,13 +32,13 @@
   }],
   
   "scales": [
-    {
+     {
       "name": "x",
-      "type": "point",
+      "type": "sqrt",
       "round": true,
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "country"},
+      "domain": {"data": "cia", "field": "size"},
       "range" : "width"
     },
     {
@@ -52,7 +47,7 @@
       "range": "height",
       "nice": true,
       "zero": true,
-      "domain": {"data": "cia", "field": "mWegPpop"}
+      "domain": [-20,70]
     },
     {
       "name": "color",
@@ -63,14 +58,21 @@
   ],
   "projections": [],
    "axes": [
-   
+    {
+      "scale": "x",
+      "grid": true,
+      "domain": false,
+      "orient": "bottom",
+      "titlePadding": 5,
+      "title": "country size"
+    },
     {
       "scale": "y",
       "grid": true,
       "domain": false,
       "orient": "left",
       "titlePadding": 5,
-      "title": "m road / population density"
+      "title": "m road / person"
     }
   ],
 
@@ -88,7 +90,7 @@
       	  }
         },
         "update": {
-          "x": {"scale": "x", "field": "country"},
+          "x": {"scale": "x", "field": "size"},
           "y": {"scale": "y", "field": "mWegPpop"},
           "shape": {"value": "circle"},
           "strokeWidth": {"value": 2},
